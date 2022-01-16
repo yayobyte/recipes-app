@@ -1,6 +1,6 @@
 import { createStackNavigator } from "react-navigation-stack";
 import {
-    NAV_CATEGORIES,
+    NAV_CATEGORIES, NAV_CATEGORIES_NAME,
     NAV_CATEGORY_MEALS,
     NAV_CATEGORY_MEALS_NAME,
     NAV_FAVORITES,
@@ -26,11 +26,17 @@ export const mealsNavigator = createStackNavigator({
     [NAV_CATEGORIES]: {
         screen: CategoriesScreen,
         navigationOptions: {
-            headerTitle: NAV_CATEGORY_MEALS_NAME,
+            headerTitle: NAV_CATEGORIES_NAME,
             ...commonNavigationStyles,
         }
     },
-    [NAV_CATEGORY_MEALS]: CategoryMealScreen,
+    [NAV_CATEGORY_MEALS]: {
+        screen: CategoryMealScreen,
+        navigationOptions: {
+            headerTitle: NAV_CATEGORY_MEALS_NAME,
+            ...commonNavigationStyles,
+        },
+    },
     [NAV_MEAL_DETAIL]: MealDetailsScreen,
     [NAV_FAVORITES]: FavoritesScreen,
     [NAV_FILTER]: FilterScreen,

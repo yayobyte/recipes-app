@@ -19,10 +19,15 @@ const RenderGridItem = ({ renderItem, onPress }) => (
 )
 
 export const CategoriesScreen = ({ navigation }: CategoriesScreenProps) => {
-    const goToMealsHandler = () => { navigation.navigate({ routeName: NAV_CATEGORY_MEALS }) };
+    const goToMealsHandler = (categoryId: Category['id']) => {
+      navigation.navigate({
+        routeName: NAV_CATEGORY_MEALS,
+        params: { categoryId }
+      })
+    };
 
     const renderGridItemTouchable = (renderItem: ListRenderItem<Category>) => (
-      <RenderGridItem renderItem={renderItem} onPress={goToMealsHandler} />
+      <RenderGridItem renderItem={renderItem} onPress={() => goToMealsHandler(renderItem.item.id)} />
     )
 
     return (
