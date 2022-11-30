@@ -16,11 +16,11 @@ export class Meal {
   id: Id
   categoryIds: CategoryIds
   title: Title
-  imageUrl: Affordability
-  ingredients: Complexity
-  steps: ImageUrl
+  imageUrl: ImageUrl
+  ingredients: Ingredients
+  steps: Steps
   duration: Duration
-  complexity: Ingredients
+  complexity: Complexity
   affordability: Affordability
   isGlutenFree: IsGlutenFree
   isVegan: IsVegan
