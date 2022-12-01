@@ -1,11 +1,10 @@
 import { FlatList, ListRenderItem, Text, TouchableOpacity, View} from "react-native";
 import {styles} from './categories.screen.styles'
-import {NAV_CATEGORY_MEALS} from "../../navigation/screen-names";
 import {CATEGORIES} from "../../data/dummy-data";
 import {Category} from "../../models/category";
 
 type CategoriesScreenProps = {
-    navigation:  any,
+  goToMealsHandler:  (categoryId: Category['id']) => void,
 }
 
 const RenderGridItem = ({ renderItem, onPress }) => (
@@ -18,14 +17,7 @@ const RenderGridItem = ({ renderItem, onPress }) => (
   </TouchableOpacity>
 )
 
-export const CategoriesScreen = ({ navigation }: CategoriesScreenProps) => {
-    const goToMealsHandler = (categoryId: Category['id']) => {
-      navigation.navigate({
-        routeName: NAV_CATEGORY_MEALS,
-        params: { categoryId }
-      })
-    };
-
+export const CategoriesScreen = ({ goToMealsHandler }: CategoriesScreenProps) => {
     const renderGridItemTouchable = (renderItem: ListRenderItem<Category>) => (
       <RenderGridItem renderItem={renderItem} onPress={() => goToMealsHandler(renderItem.item.id)} />
     )
