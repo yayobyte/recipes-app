@@ -2,6 +2,12 @@ type Id = string;
 type Title = string;
 type Color = string;
 
+export type CategoryAttributes = {
+  id: Id,
+  title: Title,
+  color: Color,
+}
+
 export class Category {
   id: Id;
   title: Title;

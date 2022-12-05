@@ -1,28 +1,18 @@
-import { FlatList, ListRenderItem, Text, TouchableOpacity, View} from "react-native";
-import {styles} from './categories.screen.styles'
+import { FlatList} from "react-native";
 import {CATEGORIES} from "../../data/dummy-data";
-import {Category} from "../../models/category";
+import {Category, CategoryAttributes} from "../../models/category";
+import {CategoryGridItem} from "../../components/category-grid-item";
 
 type CategoriesScreenProps = {
   goToMealsHandler:  (categoryId: Category['id']) => void,
 }
 
-const RenderGridItem = ({ renderItem, onPress }) => (
-  <TouchableOpacity onPress={onPress}>
-    <View style={styles.gridItem}>
-      <Text>
-        {renderItem.item.title}
-      </Text>
-    </View>
-  </TouchableOpacity>
-)
-
 export const CategoriesScreen = ({ goToMealsHandler }: CategoriesScreenProps) => {
-    const renderGridItemTouchable = (renderItem: ListRenderItem<Category>) => (
-      <RenderGridItem renderItem={renderItem} onPress={() => goToMealsHandler(renderItem.item.id)} />
+    const renderGridItem = (renderItem: { item: CategoryAttributes }) => (
+      <CategoryGridItem item={renderItem.item} onPress={() => goToMealsHandler(renderItem.item.id)} />
     )
 
     return (
-        <FlatList numColumns={2} data={CATEGORIES} renderItem={renderGridItemTouchable} />
+        <FlatList numColumns={2} data={CATEGORIES} renderItem={renderGridItem} keyExtractor={(item) => item.id}/>
     )
 }
