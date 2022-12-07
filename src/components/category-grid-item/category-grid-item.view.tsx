@@ -7,12 +7,12 @@ type CategoryGridItemProps = {
     onPress: () => void
 }
 
-export const CategoryGridItem = ({ item: { id, color, title }, onPress }: CategoryGridItemProps) => (
-    <Pressable onPress={onPress}>
-        <View style={styles.gridItem}>
-            <Text>
-                {title}
-            </Text>
-        </View>
-    </Pressable>
+export const CategoryGridItem = ({ item: { title, color }, onPress }: CategoryGridItemProps) => (
+    <View style={styles.container}>
+        <Pressable onPress={onPress} style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]} android_ripple={{ color: '#CCC'}} >
+            <View style={[styles.innerContainer,  { backgroundColor: color }]}>
+                <Text style={styles.title}>{title}</Text>
+            </View>
+        </Pressable>
+    </View>
 )

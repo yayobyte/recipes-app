@@ -1,5 +1,4 @@
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {useNavigation} from "@react-navigation/native"
 import {
     NAV_CATEGORIES,
     NAV_CATEGORIES_NAME,
@@ -17,6 +16,11 @@ import {FilterScreen} from "../screens/filter/filter.screen";
 import {Colors} from "../constants/colors";
 import {Platform} from "react-native";
 import {Category} from "../models/category";
+import {NavigationProp, ParamListBase, RouteProp, useRoute} from "@react-navigation/native";
+
+type ScreenNavigatorProps = {
+    navigation: NavigationProp<ParamListBase>
+}
 
 const commonNavigationStyles = {
     headerStyle: {
@@ -25,31 +29,41 @@ const commonNavigationStyles = {
     headerTintColor: Platform.OS == 'android' ? Colors.white : Colors.primary,
 }
 
+function useRouteParams<T = Record<string, string>> () {
+    return useRoute<RouteProp<{ params: Readonly<T> }>>()
+}
+
 const {Navigator, Screen} = createNativeStackNavigator()
+
+const createCategoryMealsScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
+    const { params: { categoryId }} = useRouteParams<{ categoryId: string }>()
+    const goToMealsHandler = () => navigation.navigate(NAV_MEAL_DETAIL)
+    const goBackHandler = () => navigation.goBack()
+
+    return (
+        <CategoryMealScreen
+            goToMealsHandler={goToMealsHandler}
+            goBackHandler={goBackHandler}
+            categoryId={categoryId}
+        />
+    )
+}
+
+const createCategoryScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
+    const goToMealsHandler = (categoryId: Category['id']) => {
+        navigation.navigate(NAV_CATEGORY_MEALS, {categoryId})
+    };
+    return <CategoriesScreen goToMealsHandler={goToMealsHandler}/>
+}
 
 export const StackNavigator = () => {
     return (
         <Navigator initialRouteName={NAV_CATEGORIES}>
             <Screen name={NAV_CATEGORIES} options={{...commonNavigationStyles, title: NAV_CATEGORIES_NAME}}>
-                {({navigation}) => {
-                    const goToMealsHandler = (categoryId: Category['id']) => {
-                        navigation.navigate(NAV_CATEGORY_MEALS, {categoryId})
-                    };
-                    return <CategoriesScreen goToMealsHandler={goToMealsHandler}/>
-                }}
+                {createCategoryScreenNavigator}
             </Screen>
             <Screen name={NAV_CATEGORY_MEALS} options={{...commonNavigationStyles, title: NAV_CATEGORY_MEALS_NAME}}>
-                {({navigation, route}) => {
-                    const {categoryId} = route.params
-                    const goToMealsHandler = () => navigation.navigate(NAV_MEAL_DETAIL)
-                    const goBackHandler = () => navigation.goBack()
-
-                    return (<CategoryMealScreen
-                        goToMealsHandler={goToMealsHandler}
-                        goBackHandler={goBackHandler}
-                        categoryId={categoryId}/>)
-                    }
-                }
+                {createCategoryMealsScreenNavigator}
             </Screen>
             <Screen name={NAV_MEAL_DETAIL} component={MealDetailsScreen}/>
             <Screen name={NAV_FAVORITES} component={FavoritesScreen}/>

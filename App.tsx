@@ -20,10 +20,12 @@ export default function App() {
   }
 
   return (
-      <NavigationContainer>
-        <StackNavigator />
-        <StatusBar />
-      </NavigationContainer>
+      <>
+        <StatusBar style={'dark'}/>
+        <NavigationContainer>
+            <StackNavigator />
+        </NavigationContainer>
+      </>
 );
 }
 
