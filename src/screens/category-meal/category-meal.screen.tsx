@@ -1,5 +1,5 @@
-import {Button, FlatList, Text, View} from "react-native";
-import {styles} from "../categories/categories.screen.styles";
+import {Button, FlatList, Pressable, Text, View, Image} from "react-native";
+import {styles} from "./category-meal.styles";
 import {CATEGORIES, MEALS} from "../../data/dummy-data";
 import {RouteProp, useRoute} from "@react-navigation/native";
 import {Meal} from "../../models/meal";
@@ -16,8 +16,16 @@ export const CategoryMealScreen = ({ goToMealsHandler, goBackHandler }: Category
     const meals = MEALS.filter(({ categoryIds }) => categoryIds.includes(selectedCategory?.id || ''))
 
     const renderMealItem = ( renderItem: { item: Meal}) => (
-        <View>
-            <Text>{renderItem.item.title}</Text>
+        <View style={styles.mealItem}>
+            <Pressable style={({ pressed }) => [styles.innerContainer, pressed ? styles.buttonPressed : null]} android_ripple={{ color: '#CCC'}} >
+                <Image source={{ uri: renderItem.item.imageUrl }} style={styles.image}/>
+                <Text style={styles.title}>{renderItem.item.title}</Text>
+                <View style={styles.details}>
+                    <Text style={styles.detailItem}>{renderItem.item.duration}</Text>
+                    <Text style={styles.detailItem}>{renderItem.item.complexity}</Text>
+                    <Text style={styles.detailItem}>{renderItem.item.affordability}</Text>
+                </View>
+            </Pressable>
         </View>
     )
 
