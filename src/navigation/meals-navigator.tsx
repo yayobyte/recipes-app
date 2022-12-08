@@ -14,9 +14,10 @@ import {MealDetailsScreen} from "../screens/meal-details/meal-details.screen";
 import {FavoritesScreen} from "../screens/favorites/favorites.screen";
 import {FilterScreen} from "../screens/filter/filter.screen";
 import {Colors} from "../constants/colors";
-import {Platform} from "react-native";
 import {Category} from "../models/category";
 import {NavigationProp, ParamListBase, RouteProp, useRoute} from "@react-navigation/native";
+import {CATEGORIES} from "../data/dummy-data";
+import {useLayoutEffect} from "react";
 
 type ScreenNavigatorProps = {
     navigation: NavigationProp<ParamListBase>
@@ -24,9 +25,12 @@ type ScreenNavigatorProps = {
 
 const commonNavigationStyles = {
     headerStyle: {
-        backgroundColor: Platform.OS == 'android' ? Colors.primary : Colors.white,
+        backgroundColor: Colors.background,
     },
-    headerTintColor: Platform.OS == 'android' ? Colors.white : Colors.primary,
+    headerTintColor: Colors.white,
+    contentStyle: {
+        backgroundColor: Colors.lightBackground,
+    }
 }
 
 function useRouteParams<T = Record<string, string>> () {
@@ -39,6 +43,12 @@ const createCategoryMealsScreenNavigator = ({navigation}: ScreenNavigatorProps) 
     const { params: { categoryId }} = useRouteParams<{ categoryId: string }>()
     const goToMealsHandler = () => navigation.navigate(NAV_MEAL_DETAIL)
     const goBackHandler = () => navigation.goBack()
+
+    const categoryTitle = CATEGORIES.find(({ id }) => id === categoryId )?.title
+
+    useLayoutEffect(() => {
+        navigation.setOptions({ title: categoryTitle })
+    }, [])
 
     return (
         <CategoryMealScreen
@@ -58,11 +68,11 @@ const createCategoryScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
 
 export const StackNavigator = () => {
     return (
-        <Navigator initialRouteName={NAV_CATEGORIES}>
-            <Screen name={NAV_CATEGORIES} options={{...commonNavigationStyles, title: NAV_CATEGORIES_NAME}}>
+        <Navigator initialRouteName={NAV_CATEGORIES} screenOptions={commonNavigationStyles}>
+            <Screen name={NAV_CATEGORIES} options={{title: NAV_CATEGORIES_NAME}}>
                 {createCategoryScreenNavigator}
             </Screen>
-            <Screen name={NAV_CATEGORY_MEALS} options={{...commonNavigationStyles, title: NAV_CATEGORY_MEALS_NAME}}>
+            <Screen name={NAV_CATEGORY_MEALS} options={{title: NAV_CATEGORY_MEALS_NAME}}>
                 {createCategoryMealsScreenNavigator}
             </Screen>
             <Screen name={NAV_MEAL_DETAIL} component={MealDetailsScreen}/>
