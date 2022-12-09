@@ -6,7 +6,7 @@ import {
     NAV_CATEGORY_MEALS_NAME,
     NAV_FAVORITES,
     NAV_FILTER,
-    NAV_MEAL_DETAIL
+    NAV_MEAL_DETAIL, NAV_MEAL_DETAIL_NAME
 } from "./screen-names";
 import {CategoriesScreen} from "../screens/categories/categories.screen";
 import {CategoryMealScreen} from "../screens/category-meal/category-meal.screen";
@@ -41,13 +41,13 @@ const {Navigator, Screen} = createNativeStackNavigator()
 
 const createCategoryMealsScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
     const { params: { categoryId }} = useRouteParams<{ categoryId: string }>()
-    const goToMealsHandler = () => navigation.navigate(NAV_MEAL_DETAIL)
+    const { title } = CATEGORIES.find(({ id }) => id === categoryId ) || {}
+
+    const goToMealsHandler = (mealId: string) => navigation.navigate(NAV_MEAL_DETAIL, { mealId })
     const goBackHandler = () => navigation.goBack()
 
-    const categoryTitle = CATEGORIES.find(({ id }) => id === categoryId )?.title
-
     useLayoutEffect(() => {
-        navigation.setOptions({ title: categoryTitle })
+        navigation.setOptions({ title })
     }, [])
 
     return (
@@ -66,6 +66,16 @@ const createCategoryScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
     return <CategoriesScreen goToMealsHandler={goToMealsHandler}/>
 }
 
+const createMealDetailsScreenNavigator = ({ navigation }: ScreenNavigatorProps) => {
+    const goToHomeHandler = () => { navigation.navigate(NAV_CATEGORIES) };
+
+    const { params: { mealId } } = useRouteParams<{ mealId: string }>()
+
+    return (
+        <MealDetailsScreen goToHomeHandler={goToHomeHandler} mealId={mealId}/>
+    )
+}
+
 export const StackNavigator = () => {
     return (
         <Navigator initialRouteName={NAV_CATEGORIES} screenOptions={commonNavigationStyles}>
@@ -75,7 +85,9 @@ export const StackNavigator = () => {
             <Screen name={NAV_CATEGORY_MEALS} options={{title: NAV_CATEGORY_MEALS_NAME}}>
                 {createCategoryMealsScreenNavigator}
             </Screen>
-            <Screen name={NAV_MEAL_DETAIL} component={MealDetailsScreen}/>
+            <Screen name={NAV_MEAL_DETAIL} options={{ title: NAV_MEAL_DETAIL_NAME }}>
+                {createMealDetailsScreenNavigator}
+            </Screen>
             <Screen name={NAV_FAVORITES} component={FavoritesScreen}/>
             <Screen name={NAV_FILTER} component={FilterScreen}/>
         </Navigator>

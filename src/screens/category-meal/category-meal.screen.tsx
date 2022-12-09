@@ -7,7 +7,7 @@ import {Colors} from "../../constants/colors";
 
 interface CategoryMealScreenProps {
     categoryId: string
-    goToMealsHandler: () => void
+    goToMealsHandler: (id: string) => void
     goBackHandler: () => void
 }
 
@@ -21,7 +21,7 @@ export const CategoryMealScreen = ({goToMealsHandler, goBackHandler}: CategoryMe
             <Pressable
                 style={({pressed}) => [styles.innerContainer, pressed ? styles.buttonPressed : null]}
                 android_ripple={{color: Colors.gray }}
-                onPress={goToMealsHandler}
+                onPress={() => goToMealsHandler(renderItem.item.id)}
             >
                 <Image source={{uri: renderItem.item.imageUrl}} style={styles.image}/>
                 <Text style={styles.title}>{renderItem.item.title}</Text>
@@ -38,7 +38,6 @@ export const CategoryMealScreen = ({goToMealsHandler, goBackHandler}: CategoryMe
         <View style={styles.container}>
             <FlatList data={meals} renderItem={renderMealItem}/>
             <View>
-                <Button title={'Go to details'} onPress={goToMealsHandler}/>
                 <Button title={'Go back'} onPress={goBackHandler}/>
             </View>
         </View>

@@ -1,16 +1,16 @@
-type Id = string
-type CategoryIds = string[]
-type Title = string
-type Affordability = string
-type Complexity = string
-type ImageUrl = string
-type Duration = number
-type Ingredients = string[]
-type Steps = string[]
-type IsGlutenFree = boolean
-type IsVegan = boolean
-type IsVegetarian = boolean
-type IsLactoseFree = boolean
+export type Id = string
+export type CategoryIds = string[]
+export type Title = string
+export type Affordability = string
+export type Complexity = string
+export type ImageUrl = string
+export type Duration = number
+export type Ingredients = string[]
+export type Steps = string[]
+export type IsGlutenFree = boolean
+export type IsVegan = boolean
+export type IsVegetarian = boolean
+export type IsLactoseFree = boolean
 
 export class Meal {
   id: Id
