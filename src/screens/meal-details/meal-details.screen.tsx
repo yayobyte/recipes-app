@@ -1,30 +1,50 @@
-import {Button, Text, View, Image, FlatList } from "react-native";
+import {Button, Text, View, Image} from "react-native";
 import {MEALS} from "../../data/dummy-data";
 import {styles} from './meal-details.styles'
 import React from "react";
-import {Ingredients, Meal} from "../../models/meal";
+import {MealDetailInfo} from "../../components/meal-detail-info";
+import {Subtitle} from "../../components/ui/Subtitle";
 
 type MealDetailsScreenProps = {
     goToHomeHandler: () => void
     mealId: string
 }
 
-export const MealDetailsScreen = ({ goToHomeHandler, mealId }: MealDetailsScreenProps) => {
-    const { title, imageUrl, ingredients } = MEALS.find(({ id }) => id === mealId) || {}
+export const MealDetailsScreen = ({goToHomeHandler, mealId}: MealDetailsScreenProps) => {
+    const {
+        title,
+        imageUrl,
+        ingredients = [],
+        steps = [],
+        duration = 0,
+        affordability = '',
+        complexity = ''
+    } = MEALS.find(({id}) => id === mealId) || {}
 
-    const renderIngredients = (renderItem: { item: Ingredients[0] }) => (
-        <Text>{renderItem.item}</Text>
-    )
     return (
         <View style={styles.container}>
-            <Image source={{ uri: imageUrl}} style={styles.image} />
-            <Text>Categories Screen! {title}</Text>
-            <View>
-
+            <Image source={{uri: imageUrl}} style={styles.image}/>
+            <Text style={styles.title}>{title}</Text>
+            <MealDetailInfo
+                duration={duration}
+                complexity={complexity}
+                affordability={affordability}
+                textStyle={styles.detailText}
+            />
+            <Subtitle text={'Ingredients'} />
+            <View style={styles.ingredients}>
+                {ingredients.map((ingredient, index) => (
+                    <Text key={`ingredient_${index}`}>{ingredient}</Text>
+                ))}
             </View>
-            <FlatList data={ingredients} renderItem={renderIngredients}/>
+            <Subtitle text={'Steps'} />
+            <View style={styles.steps}>
+                {steps.map((step, index) => (
+                    <Text key={`step_${index}`}>{step}</Text>
+                ))}
+            </View>
             <Text></Text>
-            <Button title={'Go To Start'} onPress={goToHomeHandler} />
+            <Button title={'Go To Start'} onPress={goToHomeHandler}/>
         </View>
     )
 }
