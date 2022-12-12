@@ -1,12 +1,16 @@
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import {createDrawerNavigator} from '@react-navigation/drawer'
 import {
     NAV_CATEGORIES,
     NAV_CATEGORIES_NAME,
     NAV_CATEGORY_MEALS,
     NAV_CATEGORY_MEALS_NAME,
+    NAV_DRAWER_CATEGORIES,
     NAV_FAVORITES,
+    NAV_FAVORITES_NAME,
     NAV_FILTER,
-    NAV_MEAL_DETAIL, NAV_MEAL_DETAIL_NAME
+    NAV_MEAL_DETAIL,
+    NAV_MEAL_DETAIL_NAME
 } from "./screen-names";
 import {CategoriesScreen} from "../screens/categories/categories.screen";
 import {CategoryMealScreen} from "../screens/category-meal/category-meal.screen";
@@ -19,6 +23,7 @@ import {NavigationProp, ParamListBase, RouteProp, useRoute} from "@react-navigat
 import {CATEGORIES} from "../data/dummy-data";
 import React, {useLayoutEffect} from "react";
 import {IconButton} from "../components/ui/IconButton";
+import {Ionicons} from '@expo/vector-icons'
 
 type ScreenNavigatorProps = {
     navigation: NavigationProp<ParamListBase>
@@ -34,21 +39,35 @@ const commonNavigationStyles = {
     }
 }
 
-function useRouteParams<T = Record<string, string>> () {
+const commonDrawerNavigationStyles = {
+    ...commonNavigationStyles,
+    sceneContainerStyle: {
+        backgroundColor: Colors.lightBackground
+    },
+    drawerContentStyle: {
+        backgroundColor: Colors.background,
+    },
+    drawerInactiveTintColor: Colors.white,
+    drawerActiveTintColor: Colors.background,
+    drawerActiveBackgroundColor: Colors.white,
+}
+
+function useRouteParams<T = Record<string, string>>() {
     return useRoute<RouteProp<{ params: Readonly<T> }>>()
 }
 
-const {Navigator, Screen} = createNativeStackNavigator()
+const Stack = createNativeStackNavigator()
+const Drawer = createDrawerNavigator()
 
 const createCategoryMealsScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
-    const { params: { categoryId }} = useRouteParams<{ categoryId: string }>()
-    const { title } = CATEGORIES.find(({ id }) => id === categoryId ) || {}
+    const {params: {categoryId}} = useRouteParams<{ categoryId: string }>()
+    const {title} = CATEGORIES.find(({id}) => id === categoryId) || {}
 
-    const goToMealsHandler = (mealId: string) => navigation.navigate(NAV_MEAL_DETAIL, { mealId })
+    const goToMealsHandler = (mealId: string) => navigation.navigate(NAV_MEAL_DETAIL, {mealId})
     const goBackHandler = () => navigation.goBack()
 
     useLayoutEffect(() => {
-        navigation.setOptions({ title })
+        navigation.setOptions({title})
     }, [])
 
     return (
@@ -67,15 +86,17 @@ const createCategoryScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
     return <CategoriesScreen goToMealsHandler={goToMealsHandler}/>
 }
 
-const createMealDetailsScreenNavigator = ({ navigation }: ScreenNavigatorProps) => {
-    const goToHomeHandler = () => { navigation.navigate(NAV_CATEGORIES) };
+const createMealDetailsScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
+    const goToHomeHandler = () => {
+        navigation.navigate(NAV_CATEGORIES)
+    };
 
-    const { params: { mealId } } = useRouteParams<{ mealId: string }>()
+    const {params: {mealId}} = useRouteParams<{ mealId: string }>()
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => {
-                return <IconButton type={'star'} color={Colors.white} />
+                return <IconButton type={'star'} color={Colors.white}/>
             }
         })
     }, [])
@@ -85,20 +106,43 @@ const createMealDetailsScreenNavigator = ({ navigation }: ScreenNavigatorProps) 
     )
 }
 
+const DrawerNavigator = () => {
+    return (
+        <Drawer.Navigator screenOptions={commonDrawerNavigationStyles}>
+            <Drawer.Screen
+                name={NAV_DRAWER_CATEGORIES}
+                options={{
+                    title: NAV_CATEGORIES_NAME,
+                    drawerIcon: ({color, size}) => <Ionicons name={'home'} color={color} size={size}/>
+                }}>
+                {createCategoryScreenNavigator}
+            </Drawer.Screen>
+            <Drawer.Screen
+                name={NAV_FAVORITES}
+                component={FavoritesScreen}
+                options={{
+                    title: NAV_FAVORITES_NAME,
+                    drawerIcon: ({ color, size }) => <Ionicons name={'star'} color={color} size={size} />
+                }}
+            />
+        </Drawer.Navigator>
+    )
+}
+
 export const StackNavigator = () => {
     return (
-        <Navigator initialRouteName={NAV_CATEGORIES} screenOptions={commonNavigationStyles}>
-            <Screen name={NAV_CATEGORIES} options={{title: NAV_CATEGORIES_NAME}}>
-                {createCategoryScreenNavigator}
-            </Screen>
-            <Screen name={NAV_CATEGORY_MEALS} options={{title: NAV_CATEGORY_MEALS_NAME}}>
+        <Stack.Navigator initialRouteName={NAV_CATEGORIES} screenOptions={commonNavigationStyles}>
+            <Drawer.Screen name={NAV_CATEGORIES} options={{headerShown: false}}>
+                {() => <DrawerNavigator/>}
+            </Drawer.Screen>
+            <Stack.Screen name={NAV_CATEGORY_MEALS} options={{title: NAV_CATEGORY_MEALS_NAME}}>
                 {createCategoryMealsScreenNavigator}
-            </Screen>
-            <Screen name={NAV_MEAL_DETAIL} options={{ title: NAV_MEAL_DETAIL_NAME }}>
+            </Stack.Screen>
+            <Stack.Screen name={NAV_MEAL_DETAIL} options={{title: NAV_MEAL_DETAIL_NAME}}>
                 {createMealDetailsScreenNavigator}
-            </Screen>
-            <Screen name={NAV_FAVORITES} component={FavoritesScreen}/>
-            <Screen name={NAV_FILTER} component={FilterScreen}/>
-        </Navigator>
+            </Stack.Screen>
+            <Stack.Screen name={NAV_FAVORITES} component={FavoritesScreen}/>
+            <Stack.Screen name={NAV_FILTER} component={FilterScreen}/>
+        </Stack.Navigator>
     )
 }
