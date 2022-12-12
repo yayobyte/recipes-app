@@ -3,8 +3,8 @@ import {Colors} from "../../constants/colors";
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
         justifyContent: 'center',
+        marginBottom: 48,
     },
     image: {
         width: '100%',
@@ -19,5 +19,8 @@ export const styles = StyleSheet.create({
     },
     detailText: {
         color: Colors.white,
+    },
+    listContainer: {
+        padding: 12,
     },
 })

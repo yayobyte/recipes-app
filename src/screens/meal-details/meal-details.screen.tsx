@@ -1,4 +1,4 @@
-import {Button, Text, View, Image} from "react-native";
+import {Button, Text, View, Image, ScrollView} from "react-native";
 import {MEALS} from "../../data/dummy-data";
 import {styles} from './meal-details.styles'
 import React from "react";
@@ -23,7 +23,7 @@ export const MealDetailsScreen = ({goToHomeHandler, mealId}: MealDetailsScreenPr
     } = MEALS.find(({id}) => id === mealId) || {}
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Image source={{uri: imageUrl}} style={styles.image}/>
             <Text style={styles.title}>{title}</Text>
             <MealDetailInfo
@@ -32,12 +32,13 @@ export const MealDetailsScreen = ({goToHomeHandler, mealId}: MealDetailsScreenPr
                 affordability={affordability}
                 textStyle={styles.detailText}
             />
-            <Subtitle text={'Ingredients'} />
-            <List list={ingredients} />
-            <Subtitle text={'Steps'} />
-            <List list={steps} />
-            <Text></Text>
+            <View style={styles.listContainer}>
+                <Subtitle text={'Ingredients'} />
+                <List list={ingredients} />
+                <Subtitle text={'Steps'} />
+                <List list={steps} />
+            </View>
             <Button title={'Go To Start'} onPress={goToHomeHandler}/>
-        </View>
+        </ScrollView>
     )
 }

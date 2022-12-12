@@ -11,7 +11,9 @@ export const List = ({ list, style }: ListProps) => {
     return (
         <View style={[styles.container, style]}>
             {list.map((item, index) => (
-                <Text key={`list_${index}`}>{item}</Text>
+                <View style={styles.item}>
+                    <Text key={`list_${index}_${item}`}>{item}</Text>
+                </View>
             ))}
         </View>
     )
