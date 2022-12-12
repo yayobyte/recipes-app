@@ -4,6 +4,7 @@ import {styles} from './meal-details.styles'
 import React from "react";
 import {MealDetailInfo} from "../../components/meal-detail-info";
 import {Subtitle} from "../../components/ui/Subtitle";
+import {List} from "../../components/ui/List";
 
 type MealDetailsScreenProps = {
     goToHomeHandler: () => void
@@ -32,17 +33,9 @@ export const MealDetailsScreen = ({goToHomeHandler, mealId}: MealDetailsScreenPr
                 textStyle={styles.detailText}
             />
             <Subtitle text={'Ingredients'} />
-            <View style={styles.ingredients}>
-                {ingredients.map((ingredient, index) => (
-                    <Text key={`ingredient_${index}`}>{ingredient}</Text>
-                ))}
-            </View>
+            <List list={ingredients} />
             <Subtitle text={'Steps'} />
-            <View style={styles.steps}>
-                {steps.map((step, index) => (
-                    <Text key={`step_${index}`}>{step}</Text>
-                ))}
-            </View>
+            <List list={steps} />
             <Text></Text>
             <Button title={'Go To Start'} onPress={goToHomeHandler}/>
         </View>

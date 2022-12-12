@@ -20,10 +20,4 @@ export const styles = StyleSheet.create({
     detailText: {
         color: Colors.white,
     },
-    steps: {
-
-    },
-    ingredients: {
-
-    },
 })
