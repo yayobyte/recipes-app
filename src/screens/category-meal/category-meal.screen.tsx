@@ -4,6 +4,7 @@ import {CATEGORIES, MEALS} from "../../data/dummy-data";
 import {RouteProp, useRoute} from "@react-navigation/native";
 import {Meal} from "../../models/meal";
 import {Colors} from "../../constants/colors";
+import {MealDetailInfo} from "../../components/meal-detail-info";
 
 interface CategoryMealScreenProps {
     categoryId: string
@@ -25,11 +26,11 @@ export const CategoryMealScreen = ({goToMealsHandler, goBackHandler}: CategoryMe
             >
                 <Image source={{uri: renderItem.item.imageUrl}} style={styles.image}/>
                 <Text style={styles.title}>{renderItem.item.title}</Text>
-                <View style={styles.details}>
-                    <Text style={styles.detailItem}>{renderItem.item.duration}</Text>
-                    <Text style={styles.detailItem}>{renderItem.item.complexity}</Text>
-                    <Text style={styles.detailItem}>{renderItem.item.affordability}</Text>
-                </View>
+                <MealDetailInfo
+                    duration={renderItem.item.duration}
+                    complexity={renderItem.item.complexity}
+                    affordability={renderItem.item.affordability}
+                />
             </Pressable>
         </View>
     )

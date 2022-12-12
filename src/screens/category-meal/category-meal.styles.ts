@@ -29,17 +29,6 @@ export const styles = StyleSheet.create({
         shadowRadius: 4,
         overflow: isAndroid ? 'hidden': 'visible',
     },
-    details: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 8,
-    },
-    detailItem: {
-        marginHorizontal: 4,
-        fontSize: 12,
-        textTransform: 'capitalize',
-    },
     innerContainer: {
         borderRadius: 8,
         overflow: 'hidden',
