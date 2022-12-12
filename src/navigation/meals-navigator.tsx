@@ -17,7 +17,8 @@ import {Colors} from "../constants/colors";
 import {Category} from "../models/category";
 import {NavigationProp, ParamListBase, RouteProp, useRoute} from "@react-navigation/native";
 import {CATEGORIES} from "../data/dummy-data";
-import {useLayoutEffect} from "react";
+import React, {useLayoutEffect} from "react";
+import {IconButton} from "../components/ui/IconButton";
 
 type ScreenNavigatorProps = {
     navigation: NavigationProp<ParamListBase>
@@ -70,6 +71,14 @@ const createMealDetailsScreenNavigator = ({ navigation }: ScreenNavigatorProps) 
     const goToHomeHandler = () => { navigation.navigate(NAV_CATEGORIES) };
 
     const { params: { mealId } } = useRouteParams<{ mealId: string }>()
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                return <IconButton type={'star'} color={Colors.white} />
+            }
+        })
+    }, [])
 
     return (
         <MealDetailsScreen goToHomeHandler={goToHomeHandler} mealId={mealId}/>
