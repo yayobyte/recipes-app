@@ -1,10 +1,14 @@
 import {Button, Text, View, Image, ScrollView} from "react-native";
 import {MEALS} from "../../data/dummy-data";
 import {styles} from './meal-details.styles'
-import React from "react";
+import React, {useContext, useLayoutEffect} from "react";
 import {MealDetailInfo} from "../../components/meal-detail-info";
 import {Subtitle} from "../../components/ui/Subtitle";
 import {List} from "../../components/ui/List";
+import {IconButton} from "../../components/ui/IconButton";
+import {Colors} from "../../constants/colors";
+import {useNavigation} from "@react-navigation/native";
+import {FavoritesContext} from "../../store/context/favorites.context";
 
 type MealDetailsScreenProps = {
     goToHomeHandler: () => void
@@ -12,6 +16,9 @@ type MealDetailsScreenProps = {
 }
 
 export const MealDetailsScreen = ({goToHomeHandler, mealId}: MealDetailsScreenProps) => {
+    const navigation = useNavigation()
+    const { ids, addFavorite, removeFavorite } = useContext(FavoritesContext)
+
     const {
         title,
         imageUrl,
@@ -21,6 +28,20 @@ export const MealDetailsScreen = ({goToHomeHandler, mealId}: MealDetailsScreenPr
         affordability = '',
         complexity = ''
     } = MEALS.find(({id}) => id === mealId) || {}
+
+    const isFavorite = ids.includes(mealId)
+
+    const setFavorite = () => {
+        return isFavorite ? removeFavorite(mealId) : addFavorite(mealId)
+    }
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                return <IconButton type={isFavorite ? 'star' : 'star-outline'} color={Colors.white} onPress={setFavorite}/>
+            }
+        })
+    }, [isFavorite])
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

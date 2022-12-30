@@ -6,7 +6,7 @@ type FavoritesContextType = {
     removeFavorite: (id: string) => void
 }
 
-const FavoritesContext: Context<FavoritesContextType> = createContext({
+export const FavoritesContext: Context<FavoritesContextType> = createContext({
     ids: [''],
     addFavorite: (id: string) => {},
     removeFavorite: (id: string) => {},

@@ -22,7 +22,6 @@ import {Category} from "../models/category";
 import {NavigationProp, ParamListBase, RouteProp, useRoute} from "@react-navigation/native";
 import {CATEGORIES} from "../data/dummy-data";
 import React, {useLayoutEffect} from "react";
-import {IconButton} from "../components/ui/IconButton";
 import {Ionicons} from '@expo/vector-icons'
 
 type ScreenNavigatorProps = {
@@ -87,19 +86,11 @@ const createCategoryScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
 }
 
 const createMealDetailsScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
+    const {params: {mealId}} = useRouteParams<{ mealId: string }>()
+
     const goToHomeHandler = () => {
         navigation.navigate(NAV_CATEGORIES)
     };
-
-    const {params: {mealId}} = useRouteParams<{ mealId: string }>()
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => {
-                return <IconButton type={'star'} color={Colors.white}/>
-            }
-        })
-    }, [])
 
     return (
         <MealDetailsScreen goToHomeHandler={goToHomeHandler} mealId={mealId}/>
