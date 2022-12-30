@@ -110,13 +110,22 @@ const DrawerNavigator = () => {
             </Drawer.Screen>
             <Drawer.Screen
                 name={NAV_FAVORITES}
-                component={FavoritesScreen}
                 options={{
                     title: NAV_FAVORITES_NAME,
                     drawerIcon: ({ color, size }) => <Ionicons name={'star'} color={color} size={size} />
                 }}
-            />
+            >
+                {createFavoritesScreenNavigator}
+            </Drawer.Screen>
         </Drawer.Navigator>
+    )
+}
+
+const createFavoritesScreenNavigator = ({navigation}: ScreenNavigatorProps) => {
+    const goToMealsHandler = (mealId: string) => navigation.navigate(NAV_MEAL_DETAIL, {mealId})
+
+    return (
+        <FavoritesScreen goToMealsHandler={goToMealsHandler} />
     )
 }
 
@@ -132,7 +141,9 @@ export const StackNavigator = () => {
             <Stack.Screen name={NAV_MEAL_DETAIL} options={{title: NAV_MEAL_DETAIL_NAME}}>
                 {createMealDetailsScreenNavigator}
             </Stack.Screen>
-            <Stack.Screen name={NAV_FAVORITES} component={FavoritesScreen}/>
+            <Stack.Screen name={NAV_FAVORITES} options={{title: NAV_FAVORITES_NAME}}>
+                {createFavoritesScreenNavigator}
+            </Stack.Screen>
             <Stack.Screen name={NAV_FILTER} component={FilterScreen}/>
         </Stack.Navigator>
     )
